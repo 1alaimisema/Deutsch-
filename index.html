@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#18202e">
+<title>Almanca Kelime Bulmacaları</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Almanca">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+/* Layout: phone app shell. Sticky top bar (title, points, sound), scrolling content, fixed bottom tab bar. Article colors der/die/das are the core visual code. */
+:root{
+  --bg:#eef1f6; --surface:#ffffff; --ink:#18202e; --muted:#5d6779; --line:#d5dbe6;
+  --accent:#d99a00; --accent-soft:#fff1c7; --sel:#ffd75e;
+  --der:#2563c9; --die:#cf3047; --das:#18905a; --bad:#cf3047; --ok:#18905a;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#10141c; --surface:#1a2030; --ink:#edf0f6; --muted:#9aa4b8; --line:#2d3549;
+    --accent:#f2b630; --accent-soft:#3a3018; --sel:#8a6a12;
+    --der:#6f9ff2; --die:#f06c80; --das:#4fcb8c; --bad:#f06c80; --ok:#4fcb8c;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10141c; --surface:#1a2030; --ink:#edf0f6; --muted:#9aa4b8; --line:#2d3549;
+  --accent:#f2b630; --accent-soft:#3a3018; --sel:#8a6a12;
+  --der:#6f9ff2; --die:#f06c80; --das:#4fcb8c; --bad:#f06c80; --ok:#4fcb8c;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.der{color:var(--der)} .die{color:var(--die)} .das{color:var(--das)}
+
+/* App shell */
+.topbar{position:sticky;top:0;z-index:5;background:var(--ink);color:var(--bg);padding:calc(10px + env(safe-area-inset-top)) 16px 10px}
+.topbar .in{max-width:560px;margin:0 auto;display:flex;align-items:center;gap:10px}
+.logo{width:34px;height:34px;border-radius:9px;display:grid;grid-template-columns:repeat(3,1fr);overflow:hidden;flex:none}
+.logo i:nth-child(1){background:var(--der)} .logo i:nth-child(2){background:var(--die)} .logo i:nth-child(3){background:var(--das)}
+.topbar h1{font-family:var(--display);font-weight:800;font-size:19px;margin:0;line-height:1.1;flex:1}
+.topbar h1 small{display:block;font-family:var(--body);font-weight:400;font-size:12px;opacity:.7}
+.pts{background:var(--accent);color:#18202e;border-radius:999px;padding:4px 10px;font-weight:700;font-size:14px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pts.bump{animation:bump .4s}
+@keyframes bump{50%{transform:scale(1.2)}}
+.iconbtn{width:38px;height:38px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:transparent;color:inherit;display:grid;place-items:center;padding:0}
+.iconbtn svg{width:20px;height:20px}
+main{max-width:560px;margin:0 auto;padding:14px 16px calc(96px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;margin:0 -16px;padding-left:16px;padding-right:16px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:14px}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);font-weight:700}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:5;background:var(--surface);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
+.tabbar .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:2px}
+.tabbar button{border:0;background:transparent;border-radius:12px;padding:6px 0 4px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11.5px;font-weight:700;color:var(--muted)}
+.tabbar button svg{width:24px;height:24px}
+.tabbar button[aria-selected="true"]{color:var(--ink);background:var(--accent-soft)}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:14px}
+.panel h2{font-family:var(--display);font-weight:600;font-size:20px;margin:0}
+.hint{color:var(--muted);font-size:14px;margin:0}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:9px 14px;font-weight:700;font-size:14.5px}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.score{font-variant-numeric:tabular-nums;color:var(--muted);font-size:14px}
+.score b{color:var(--ink)}
+.center{justify-content:center}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.shake{animation:shake .4s}
+
+/* Article picker, shared */
+.arts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.arts button{border:2px solid currentColor;background:transparent;border-radius:12px;padding:12px 0;font-weight:800;font-size:21px;font-family:var(--display)}
+.arts.sm button{padding:6px 0;font-size:17px;border-radius:9px}
+.arts button.on{background:currentColor}
+.arts button.on span{color:var(--surface)}
+.arts button.picked-ok{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+.arts button.picked-bad{background:var(--bad);border-color:var(--bad);color:var(--surface)}
+.arts button:disabled{cursor:default}
+.step{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;margin:0 0 -6px}
+
+/* Crossword */
+.grid{display:grid;gap:2px;justify-content:center;margin:0 auto;user-select:none}
+.grid .x{width:var(--cs);height:var(--cs)}
+.c{position:relative;width:var(--cs);height:var(--cs);border:1.5px solid var(--ink);border-radius:4px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:calc(var(--cs)*.52);cursor:pointer}
+.c .n{position:absolute;top:1px;left:2px;font-size:max(8px,calc(var(--cs)*.26));font-weight:400;line-height:1;color:var(--muted)}
+.c.w{background:var(--accent-soft)}
+.c.s{background:var(--sel)}
+.c.ok{color:var(--ok)}
+.c.bad{color:var(--bad);text-decoration:line-through}
+.cluebar{background:var(--ink);color:var(--bg);border-radius:10px;padding:10px 12px;font-size:15px;min-height:46px;display:flex;flex-direction:column;gap:8px;justify-content:center}
+.cluebar .top{display:flex;gap:8px;align-items:baseline}
+.cluebar .num{font-weight:700;color:var(--accent);white-space:nowrap}
+.cluebar .arts button{background:var(--surface)}
+.kb{display:flex;flex-direction:column;gap:5px}
+.kb .kr{display:flex;gap:4px;justify-content:center}
+.kb button{flex:1;max-width:44px;height:44px;border:1px solid var(--line);border-radius:7px;background:var(--bg);font-weight:700;font-size:16px;padding:0}
+.kb button.um{background:var(--accent-soft);border-color:var(--accent)}
+.kb button.wide{flex:1.6;max-width:70px}
+.clues{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:440px){.clues{grid-template-columns:1fr}}
+.clues h3{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 6px}
+.clues ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.clues li button{width:100%;text-align:left;border:0;background:transparent;padding:5px 6px;border-radius:7px;font-size:14.5px;display:flex;gap:6px}
+.clues li button.cur{background:var(--accent-soft)}
+.clues li button .k{font-weight:700;min-width:1.4em;font-variant-numeric:tabular-nums}
+.clues li.solved .t{color:var(--muted);text-decoration:line-through}
+.clues li .sol{font-weight:700;margin-left:auto;white-space:nowrap}
+.win{border:2px solid var(--ok);border-radius:12px;padding:12px;font-weight:700;color:var(--ok);text-align:center}
+
+/* Anagram */
+.prompt{text-align:center}
+.prompt .tr{font-family:var(--display);font-weight:800;font-size:30px;line-height:1.15}
+.prompt small{color:var(--muted);font-size:14px}
+.answer{display:flex;gap:10px;justify-content:center;align-items:flex-end;flex-wrap:wrap}
+.artslot{min-width:58px;height:46px;border-bottom:3px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:22px;font-family:var(--display);color:var(--muted)}
+.slots,.tiles{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.slot{width:34px;height:46px;border-bottom:3px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:23px}
+.answer.bad .slot,.answer.bad .artslot{border-color:var(--bad)}
+.answer.ok .slot,.answer.ok .artslot{border-color:var(--ok);color:var(--ok)}
+.tile{width:46px;height:50px;border:1.5px solid var(--ink);border-radius:9px;background:var(--surface);font-weight:700;font-size:22px;box-shadow:0 3px 0 var(--line)}
+.tile:disabled{opacity:.2;box-shadow:none;cursor:default}
+.result{text-align:center;font-family:var(--display);font-weight:800;font-size:28px}
+.msg{text-align:center;font-weight:700;color:var(--bad);min-height:1.4em;margin:0}
+
+/* Articles game */
+.big{font-family:var(--display);font-weight:800;font-size:40px;text-align:center;line-height:1.1;margin-top:4px}
+.tipbox{background:var(--bg);border-left:4px solid var(--accent);border-radius:8px;padding:10px 12px;font-size:14.5px}
+.fb{text-align:center;font-weight:700;font-size:18px}
+.fb.ok{color:var(--ok)} .fb.bad{color:var(--bad)}
+
+/* Matching */
+.match{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.match .col{display:flex;flex-direction:column;gap:8px}
+.card{border:1.5px solid var(--line);background:var(--bg);border-radius:10px;padding:12px 8px;font-size:15.5px;text-align:center;min-height:52px;font-weight:700}
+.card.on{border-color:var(--accent);background:var(--accent-soft)}
+.card.done{opacity:.25;cursor:default}
+.card.wrong{border-color:var(--bad);animation:shake .4s}
+
+/* Dictionary */
+.legend{display:flex;gap:14px;font-size:14px;color:var(--muted);flex-wrap:wrap}
+.dict{width:100%;border-collapse:collapse;font-size:15px}
+.dict td{padding:7px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+.dict td:first-child{font-weight:700;white-space:nowrap}
+.dict td:last-child{color:var(--muted)}
+.dict tr.grp td{font-family:var(--display);font-weight:600;color:var(--ink);font-size:16px;padding-top:16px;border-bottom:2px solid var(--ink)}
+
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ok);color:#fff;font-weight:700;padding:8px 16px;border-radius:999px;z-index:9;pointer-events:none;transition:opacity .3s;opacity:0}
+.toast.show{opacity:1}
+.toast.bad{background:var(--bad)}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="in">
+  <div class="logo" aria-hidden="true"><i></i><i></i><i></i></div>
+  <h1>Almanca Bulmaca<small>der · die · das ile kelime öğren</small></h1>
+  <span class="pts" id="pts" aria-label="Puan">★ 0</span>
+  <button class="iconbtn" id="mute" aria-label="Sesi kapat"></button>
+</div></header>
+<main>
+  <div class="chips" id="chips" aria-label="Konu seç"></div>
+  <div id="game"></div>
+</main>
+<nav class="tabbar"><div class="in" role="tablist" id="tabs"></div></nav>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+const RAW = {
+  aile:["Aile","der Vater:baba;die Mutter:anne;der Bruder:erkek kardeş;die Schwester:kız kardeş;der Sohn:oğul;die Tochter:kız evlat;der Onkel:amca / dayı;die Tante:hala / teyze;der Opa:dede;die Oma:büyükanne;das Kind:çocuk;das Baby:bebek;die Familie:aile;der Mann:adam / koca;die Frau:kadın / eş;das Mädchen:kız çocuğu;der Junge:erkek çocuk"],
+  yemek:["Yiyecek","das Brot:ekmek;der Käse:peynir;die Milch:süt;der Apfel:elma;die Banane:muz;das Wasser:su;der Kaffee:kahve;der Tee:çay;die Butter:tereyağı;das Ei:yumurta;der Zucker:şeker;das Salz:tuz;die Suppe:çorba;der Fisch:balık;das Fleisch:et;die Kartoffel:patates;die Tomate:domates;der Reis:pirinç;die Zwiebel:soğan;das Obst:meyve"],
+  ev:["Ev","das Haus:ev;die Küche:mutfak;das Zimmer:oda;das Bett:yatak;der Tisch:masa;der Stuhl:sandalye;die Tür:kapı;das Fenster:pencere;die Lampe:lamba;der Schrank:dolap;das Bad:banyo;der Garten:bahçe;die Treppe:merdiven;der Schlüssel:anahtar;das Sofa:kanepe;der Spiegel:ayna;die Wand:duvar;der Boden:zemin"],
+  hayvan:["Hayvanlar","der Hund:köpek;die Katze:kedi;das Pferd:at;die Kuh:inek;das Schwein:domuz;der Vogel:kuş;die Maus:fare;der Bär:ayı;der Löwe:aslan;das Schaf:koyun;die Ente:ördek;der Affe:maymun;die Schlange:yılan;das Huhn:tavuk;der Elefant:fil;die Biene:arı;der Hase:tavşan;die Ziege:keçi"],
+  vucut:["Vücut","der Kopf:baş;das Auge:göz;die Nase:burun;der Mund:ağız;das Ohr:kulak;die Hand:el;der Fuß:ayak;das Bein:bacak;der Arm:kol;das Haar:saç;der Zahn:diş;das Herz:kalp;der Bauch:karın;der Rücken:sırt;die Schulter:omuz;der Finger:parmak;das Gesicht:yüz;der Hals:boyun"],
+  sehir:["Şehir","die Straße:cadde / sokak;der Bahnhof:tren istasyonu;die Schule:okul;das Krankenhaus:hastane;die Bank:banka;der Park:park;das Auto:araba;der Bus:otobüs;der Zug:tren;das Fahrrad:bisiklet;die Kirche:kilise;der Markt:pazar;die Apotheke:eczane;das Hotel:otel;der Flughafen:havalimanı;die Post:postane;das Restaurant:restoran;die Brücke:köprü"],
+  doga:["Doğa","die Sonne:güneş;der Mond:ay;der Regen:yağmur;der Schnee:kar;der Wind:rüzgâr;der Baum:ağaç;die Blume:çiçek;der Berg:dağ;das Meer:deniz;der See:göl;der Fluss:nehir;der Himmel:gökyüzü;die Wolke:bulut;der Stern:yıldız;der Wald:orman;das Wetter:hava durumu;die Erde:dünya / toprak"]
+};
+const THEMES = Object.entries(RAW).map(([id,[ad,s]]) => ({id, ad, words: s.split(";").map(x => {
+  const [g,tr] = x.split(":"); const [a,...r] = g.trim().split(" ");
+  return {a, w:r.join(" "), tr:tr.trim(), t:id};
+})}));
+const ALL = THEMES.flatMap(t => t.words);
+THEMES.unshift({id:"hepsi", ad:"Hepsi", words:ALL});
+
+const UP = s => [...s].map(c => c === "ß" ? "ß" : c.toUpperCase()).join("");
+const shuffle = a => { a = a.slice(); for (let i = a.length-1; i > 0; i--) { const j = Math.random()*(i+1)|0; [a[i],a[j]] = [a[j],a[i]]; } return a; };
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const art = (a,w) => `<span class="${a}">${a} ${esc(w)}</span>`;
+const $ = s => document.querySelector(s);
+const store = { get(k,d){ try { const v = localStorage.getItem("almanca-"+k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+                set(k,v){ try { localStorage.setItem("almanca-"+k, JSON.stringify(v)); } catch {} } };
+
+/* ---------- Sound & points ---------- */
+let AC = null, muted = store.get("muted", false), points = store.get("points", 0);
+const NOTES = { ok:[[660,0,.11],[990,.09,.22]], bad:[[196,0,.16],[147,.14,.3]], win:[[523,0,.14],[659,.12,.14],[784,.24,.14],[1047,.36,.45]], tick:[[880,0,.07]] };
+function sfx(kind){
+  if (muted) return;
+  try {
+    AC ??= new (window.AudioContext || window.webkitAudioContext)();
+    if (AC.state === "suspended") AC.resume();
+    const t0 = AC.currentTime + .01, bad = kind === "bad";
+    for (const [f,at,dur] of NOTES[kind]) {
+      const o = AC.createOscillator(), g = AC.createGain();
+      o.type = bad ? "square" : "triangle"; o.frequency.value = f;
+      const peak = bad ? .07 : .22;
+      g.gain.setValueAtTime(0, t0+at); g.gain.linearRampToValueAtTime(peak, t0+at+.015); g.gain.exponentialRampToValueAtTime(.001, t0+at+dur);
+      o.connect(g).connect(AC.destination); o.start(t0+at); o.stop(t0+at+dur+.02);
+    }
+  } catch {}
+}
+const SPK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/>`;
+function renderMute(){ const b = $("#mute"); b.innerHTML = SPK + (muted ? `<path d="m22 9-6 6M16 9l6 6"/></svg>` : `<path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>`); b.setAttribute("aria-label", muted ? "Sesi aç" : "Sesi kapat"); }
+$("#mute").addEventListener("click", () => { muted = !muted; store.set("muted", muted); renderMute(); if (!muted) sfx("tick"); });
+let toastT;
+function toast(msg, bad){ const t = $("#toast"); t.textContent = msg; t.className = "toast show" + (bad ? " bad" : ""); clearTimeout(toastT); toastT = setTimeout(() => t.className = "toast", 1100); }
+function addPts(n){ points += n; store.set("points", points); const p = $("#pts"); p.textContent = "★ " + points; p.classList.remove("bump"); void p.offsetWidth; p.classList.add("bump"); toast("+" + n + " puan"); }
+function good(n){ sfx("ok"); if (n) addPts(n); }
+function wrong(msg){ sfx("bad"); if (msg) toast(msg, true); }
+
+let themeId = store.get("theme", "hepsi"), tab = store.get("tab", "cw");
+if (!THEMES.some(t => t.id === themeId)) themeId = "hepsi";
+const words = () => THEMES.find(t => t.id === themeId).words;
+
+function tip(a, w){
+  const l = w.toLowerCase();
+  const male = ["vater","bruder","sohn","onkel","opa","mann","junge"], female = ["mutter","schwester","tochter","tante","oma","frau"];
+  if (male.includes(l)) return "Erkekleri anlatan isimler <b class='der'>der</b> alır.";
+  if (female.includes(l)) return "Kadınları anlatan isimler <b class='die'>die</b> alır.";
+  const rules = [[["ung","heit","keit","schaft","ion","tät","ie"],"die"],[["chen","lein"],"das"],[["ling","ismus","ist","ant"],"der"]];
+  for (const [ends, ex] of rules) { const e = ends.find(e => l.endsWith(e)); if (e) {
+    if (e === "chen" || e === "lein") return `<b>-${e}</b> küçültme ekidir; bu ekle biten isimler hep <b class="das">das</b> alır.`;
+    return a === ex ? `<b>-${e}</b> ile biten isimler genelde <b class="${ex}">${ex}</b> alır.` : `<b>-${e}</b> ile biten isimler genelde <b class="${ex}">${ex}</b> alır, ama bu kelime istisna: ${art(a,w)}.`;
+  }}
+  if (l.endsWith("e")) return a === "die" ? "<b>-e</b> ile biten isimlerin çoğu <b class='die'>die</b> alır." : `<b>-e</b> ile bitmesine rağmen ${art(a,w)}. Bu istisnayı ezberle.`;
+  if (l === "kind" || l === "baby") return "Bebek ve çocuk gibi cinsiyetsiz canlılar <b class='das'>das</b> alır.";
+  return `Bu kelimenin artikeli bir kurala bağlı değil. Hep birlikte söyle: ${art(a,w)}.`;
+}
+const artBtns = (attr, opts = {}) => `<div class="arts ${opts.sm ? "sm" : ""}">${["der","die","das"].map(x =>
+  `<button class="${x} ${opts.on === x ? "on" : ""} ${opts.cls?.[x] || ""}" data-${attr}="${x}" ${opts.disabled ? "disabled" : ""}><span>${x}</span></button>`).join("")}</div>`;
+
+/* ---------- Tabs & themes ---------- */
+const ICON = {
+  cw:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="6" height="6" rx="1"/><rect x="9" y="3" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/><rect x="9" y="15" width="6" height="6" rx="1"/><rect x="15" y="9" width="6" height="6" rx="1"/></svg>`,
+  an:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="2.5" y="7" width="8" height="10" rx="2" transform="rotate(-8 6.5 12)"/><rect x="13.5" y="7" width="8" height="10" rx="2" transform="rotate(8 17.5 12)"/></svg>`,
+  ar:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="12" r="3"/><circle cx="12" cy="12" r="3"/><circle cx="19" cy="12" r="3"/></svg>`,
+  mt:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="7" height="5" rx="1.5"/><rect x="15" y="15" width="7" height="5" rx="1.5"/><path d="M9 6.5h3v11h3"/></svg>`,
+  sz:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 5h16M4 12h16M4 19h10"/></svg>`
+};
+const TABS = [["cw","Bulmaca"],["an","Harfler"],["ar","Artikel"],["mt","Eşleştir"],["sz","Kelimeler"]];
+function renderNav(){
+  $("#tabs").innerHTML = TABS.map(([id,l]) => `<button role="tab" aria-selected="${id===tab}" data-tab="${id}">${ICON[id]}${l}</button>`).join("");
+  $("#chips").innerHTML = THEMES.map(t => `<button class="chip" aria-pressed="${t.id===themeId}" data-th="${t.id}">${t.ad}</button>`).join("");
+}
+$("#tabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (!b) return; tab = b.dataset.tab; store.set("tab", tab); renderNav(); start(); window.scrollTo(0,0); });
+$("#chips").addEventListener("click", e => { const b = e.target.closest("[data-th]"); if (!b) return; themeId = b.dataset.th; store.set("theme", themeId); renderNav(); resetAll(); start(); });
+function resetAll(){ cw = null; an.q = []; an.cur = null; ar.q = []; ar.cur = null; mt.pick = null; }
+function start(){
+  if (tab === "cw") { if (!cw) newCW(); else renderCW(); }
+  if (tab === "an") { if (!an.cur) nextAn(); else renderAn(); }
+  if (tab === "ar") { if (!ar.cur) nextAr(); else renderAr(); }
+  if (tab === "mt") { if (!mt.pick) newMT(); else renderMT(); }
+  if (tab === "sz") renderSz();
+}
+
+/* ---------- Crossword ---------- */
+const MAXD = 12, K = (r,c) => r + "," + c, DIR = d => d === "a" ? [0,1] : [1,0];
+function tryLayout(pool){
+  const cells = new Map(), placed = [];
+  let minR=0,maxR=0,minC=0,maxC=0;
+  const put = (item,r,c,d) => {
+    const W = UP(item.w), [dr,dc] = DIR(d);
+    for (let i = 0; i < W.length; i++) { const k = K(r+dr*i,c+dc*i); let cell = cells.get(k); if (!cell) { cell = {ch:W[i],dirs:new Set()}; cells.set(k,cell); } cell.dirs.add(d); }
+    placed.push({...item, W, r, c, d});
+    minR = Math.min(minR,r); minC = Math.min(minC,c); maxR = Math.max(maxR,r+dr*(W.length-1)); maxC = Math.max(maxC,c+dc*(W.length-1));
+  };
+  const fit = (W,r,c,d) => {
+    const [dr,dc] = DIR(d), n = W.length, r2 = r+dr*(n-1), c2 = c+dc*(n-1);
+    if (Math.max(maxR,r2)-Math.min(minR,r)+1 > MAXD || Math.max(maxC,c2)-Math.min(minC,c)+1 > MAXD) return -1;
+    if (cells.has(K(r-dr,c-dc)) || cells.has(K(r2+dr,c2+dc))) return -1;
+    let inter = 0;
+    for (let i = 0; i < n; i++) {
+      const rr = r+dr*i, cc = c+dc*i, cell = cells.get(K(rr,cc));
+      if (cell) { if (cell.ch !== W[i] || cell.dirs.has(d)) return -1; inter++; }
+      else if (cells.has(K(rr+dc,cc+dr)) || cells.has(K(rr-dc,cc-dr))) return -1;
+    }
+    return inter;
+  };
+  const sorted = pool.slice().sort((a,b) => b.w.length - a.w.length);
+  const first = sorted.splice(Math.random()*Math.min(3,sorted.length)|0, 1)[0];
+  put(first, 0, 0, Math.random() < .5 ? "a" : "d");
+  for (const item of sorted) {
+    if (placed.length >= 8) break;
+    const W = UP(item.w); if (placed.some(p => p.W === W)) continue;
+    const cands = [];
+    for (const p of placed) {
+      const [pdr,pdc] = DIR(p.d), d = p.d === "a" ? "d" : "a", [dr,dc] = DIR(d);
+      for (let j = 0; j < p.W.length; j++) for (let i = 0; i < W.length; i++) {
+        if (p.W[j] !== W[i]) continue;
+        const r = p.r+pdr*j-dr*i, c = p.c+pdc*j-dc*i, s = fit(W,r,c,d);
+        if (s > 0) cands.push({r,c,d,s:s+Math.random()*.6});
+      }
+    }
+    if (cands.length) { cands.sort((a,b) => b.s - a.s); const b = cands[0]; put(item,b.r,b.c,b.d); }
+  }
+  placed.forEach(p => { p.r -= minR; p.c -= minC; });
+  return {placed, h:maxR-minR+1, w:maxC-minC+1};
+}
+let cw = null;
+function newCW(){
+  const list = words().filter(x => x.w.length >= 3 && x.w.length <= MAXD);
+  let best = null;
+  for (let t = 0; t < 70; t++) {
+    const L = tryLayout(shuffle(list).slice(0,14)), score = L.placed.length*100 - L.h*L.w;
+    if (!best || score > best.score) best = {...L, score};
+  }
+  const P = best.placed, grid = {};
+  P.forEach((p,idx) => { p.solved = false; p.artOk = false; p.artBad = null; const [dr,dc] = DIR(p.d); for (let i = 0; i < p.W.length; i++) { const k = K(p.r+dr*i,p.c+dc*i); (grid[k] ??= {sol:p.W[i], val:"", ws:{}, bad:false}).ws[p.d] = idx; } });
+  const nums = {}; let n = 0;
+  P.slice().sort((a,b) => a.r - b.r || a.c - b.c).forEach(p => { const k = K(p.r,p.c); if (!nums[k]) nums[k] = ++n; p.num = nums[k]; });
+  Object.entries(nums).forEach(([k,v]) => grid[k].num = v);
+  const f = P.slice().sort((a,b) => a.num - b.num)[0];
+  cw = {P, rows:best.h, cols:best.w, grid, sel:{r:f.r,c:f.c,d:f.d}, won:false};
+  renderCW();
+}
+const curIdx = () => { const g = cw.grid[K(cw.sel.r,cw.sel.c)]; return g ? g.ws[cw.sel.d] : undefined; };
+function cellsOf(p){ const [dr,dc] = DIR(p.d); return [...p.W].map((_,i) => K(p.r+dr*i,p.c+dc*i)); }
+function updateSolved(){
+  const fresh = [];
+  cw.P.forEach((p,i) => { const s = cellsOf(p).every(k => cw.grid[k].val === cw.grid[k].sol); if (s && !p.solved) fresh.push(i); p.solved = s; });
+  return fresh;
+}
+function gotoNextOpen(){
+  const order = cw.P.map((p,i) => ({p,i})).sort((a,b) => a.p.num - b.p.num || (a.p.d > b.p.d ? 1 : -1));
+  const ci = curIdx(); const pos = order.findIndex(o => o.i === ci);
+  for (let s = 1; s <= order.length; s++) {
+    const {p} = order[(pos + s) % order.length];
+    if (!p.artOk) { const k = cellsOf(p).find(k => cw.grid[k].val !== cw.grid[k].sol) || K(p.r,p.c); const [r,c] = k.split(",").map(Number); cw.sel = {r,c,d:p.d}; return; }
+  }
+}
+function renderCW(){
+  const ci = curIdx(), cur = cw.P[ci], curCells = new Set(cur ? cellsOf(cur) : []);
+  const okCells = new Set(cw.P.filter(p => p.solved).flatMap(cellsOf));
+  let g = "";
+  for (let r = 0; r < cw.rows; r++) for (let c = 0; c < cw.cols; c++) {
+    const k = K(r,c), x = cw.grid[k];
+    if (!x) { g += `<div class="x"></div>`; continue; }
+    const cls = ["c"]; if (curCells.has(k)) cls.push("w"); if (cw.sel.r === r && cw.sel.c === c) cls.push("s");
+    if (okCells.has(k)) cls.push("ok"); else if (x.bad) cls.push("bad");
+    g += `<div class="${cls.join(" ")}" data-k="${k}" role="button" aria-label="hücre">${x.num ? `<span class="n">${x.num}</span>` : ""}${x.val}</div>`;
+  }
+  const clueList = d => cw.P.map((p,i) => ({p,i})).filter(o => o.p.d === d).sort((a,b) => a.p.num - b.p.num).map(({p,i}) =>
+    `<li class="${p.artOk ? "solved" : ""}"><button data-clue="${i}" class="${i === ci ? "cur" : ""}"><span class="k">${p.num}</span><span class="t">${esc(p.tr)}</span>${p.artOk ? `<span class="sol">${art(p.a,p.w)}</span>` : p.solved ? `<span class="sol score">artikel?</span>` : `<span class="sol score">${p.W.length}</span>`}</button></li>`).join("");
+  let bar = "";
+  if (cur) {
+    const label = `<span class="num">${cur.num} ${cur.d === "a" ? "→" : "↓"}</span>`;
+    if (cur.solved && !cur.artOk) bar = `<div class="top">${label}<span><b>${esc(cur.W)}</b> doğru! Artikeli ne?</span></div>${artBtns("cwart", {sm:true, cls: cur.artBad ? {[cur.artBad]:"picked-bad"} : {}})}`;
+    else if (cur.artOk) bar = `<div class="top">${label}<span>${esc(cur.tr)} = <b>${cur.a} ${esc(cur.w)}</b> ✓</span></div>`;
+    else bar = `<div class="top">${label}<span>${esc(cur.tr)} <span style="opacity:.7">(${cur.W.length} harf)</span></span></div>`;
+  }
+  const rows = ["QWERTZUIOPÜ","ASDFGHJKLÖÄ","YXCVBNMß"];
+  const doneN = cw.P.filter(p => p.artOk).length;
+  $("#game").innerHTML = `<section class="panel">
+    <div class="head"><h2>Çapraz bulmaca</h2><span class="score">Tamam: <b>${doneN}</b> / ${cw.P.length}</span></div>
+    <div class="grid" style="--cs:min(34px, calc((min(100vw, 560px) - 70px) / ${cw.cols} - 2px));grid-template-columns:repeat(${cw.cols},var(--cs))">${g}</div>
+    ${cw.won ? `<div class="win">Tebrikler! Bütün kelimeleri artikelleriyle buldun.</div>` : `<div class="cluebar">${bar}</div>`}
+    <div class="kb">${rows.map((row,ri) => `<div class="kr">${[...row].map(ch => `<button data-key="${ch}" class="${"ÄÖÜß".includes(ch) ? "um" : ""}">${ch}</button>`).join("")}${ri === 2 ? `<button data-key="BS" class="wide" aria-label="Sil">⌫</button>` : ""}</div>`).join("")}</div>
+    <div class="row">
+      <button class="btn" id="cwCheck">Kontrol et</button>
+      <button class="btn" id="cwReveal">Harf göster</button>
+      <button class="btn primary" id="cwNew" style="margin-left:auto">Yeni bulmaca</button>
+    </div>
+    <p class="hint">Türkçe ipucuna bakıp Almanca kelimeyi yaz. Kelime doğru olunca artikelini seç. Aynı kareye tekrar dokunursan yön değişir.</p>
+    <div class="clues"><div><h3>Soldan sağa →</h3><ol>${clueList("a")}</ol></div><div><h3>Yukarıdan aşağı ↓</h3><ol>${clueList("d")}</ol></div></div>
+  </section>`;
+}
+function cwKey(k){
+  if (!cw) return;
+  const {r,c,d} = cw.sel, [dr,dc] = DIR(d), cell = cw.grid[K(r,c)];
+  if (k === "BS") {
+    if (cell.val) { cell.val = ""; cell.bad = false; }
+    else { const prev = cw.grid[K(r-dr,c-dc)]; if (prev && prev.ws[d] !== undefined) { cw.sel = {r:r-dr,c:c-dc,d}; prev.val = ""; prev.bad = false; } }
+  } else {
+    cell.val = k; cell.bad = false;
+    const nx = cw.grid[K(r+dr,c+dc)]; if (nx && nx.ws[d] !== undefined) cw.sel = {r:r+dr,c:c+dc,d};
+  }
+  afterCwChange();
+}
+function afterCwChange(){
+  const fresh = updateSolved();
+  cw.P.forEach(p => { if (!p.solved) p.artOk = false; });
+  if (fresh.length) {
+    sfx("tick");
+    const p = cw.P[fresh[0]], [dr,dc] = DIR(p.d); // keep focus on the word that just got solved
+    const k = cellsOf(p).includes(K(cw.sel.r,cw.sel.c)) ? K(cw.sel.r,cw.sel.c) : K(p.r,p.c); const [r,c] = k.split(",").map(Number); cw.sel = {r,c,d:p.d};
+  }
+  renderCW();
+}
+document.addEventListener("click", e => {
+  if (tab !== "cw" || !cw) return;
+  const ab = e.target.closest("[data-cwart]");
+  if (ab) {
+    const p = cw.P[curIdx()]; if (!p || !p.solved || p.artOk) return;
+    if (ab.dataset.cwart === p.a) {
+      p.artOk = true; p.artBad = null;
+      if (cw.P.every(q => q.artOk)) { cw.won = true; addPts(10); sfx("win"); } else { good(10); gotoNextOpen(); }
+    } else { p.artBad = ab.dataset.cwart; wrong("Artikel yanlış, tekrar dene"); }
+    renderCW(); return;
+  }
+  const cell = e.target.closest("[data-k]");
+  if (cell) {
+    const [r,c] = cell.dataset.k.split(",").map(Number), x = cw.grid[cell.dataset.k], s = cw.sel;
+    if (s.r === r && s.c === c) { const o = s.d === "a" ? "d" : "a"; if (x.ws[o] !== undefined) s.d = o; }
+    else cw.sel = {r, c, d: x.ws[s.d] !== undefined ? s.d : (x.ws.a !== undefined ? "a" : "d")};
+    renderCW(); return;
+  }
+  const key = e.target.closest("[data-key]"); if (key) { cwKey(key.dataset.key); return; }
+  const cl = e.target.closest("[data-clue]"); if (cl) { const p = cw.P[+cl.dataset.clue]; const k0 = cellsOf(p).find(k => cw.grid[k].val !== cw.grid[k].sol) || K(p.r,p.c); const [r,c] = k0.split(",").map(Number); cw.sel = {r,c,d:p.d}; renderCW(); window.scrollTo({top:0,behavior:"smooth"}); return; }
+  if (e.target.id === "cwCheck") {
+    let bad = 0; Object.values(cw.grid).forEach(x => { x.bad = !!x.val && x.val !== x.sol; if (x.bad) bad++; });
+    if (bad) wrong(bad + " yanlış harf var"); else { sfx("ok"); toast("Yanlış harf yok"); }
+    renderCW();
+  }
+  if (e.target.id === "cwReveal") { const x = cw.grid[K(cw.sel.r,cw.sel.c)]; x.val = x.sol; x.bad = false; afterCwChange(); }
+  if (e.target.id === "cwNew") newCW();
+});
+document.addEventListener("keydown", e => {
+  if (tab !== "cw" || !cw || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === "Backspace") { e.preventDefault(); cwKey("BS"); return; }
+  if (/^[a-zA-ZäöüÄÖÜß]$/.test(e.key)) { e.preventDefault(); cwKey(e.key === "ß" ? "ß" : e.key.toUpperCase()); }
+});
+
+/* ---------- Anagram (article + letters) ---------- */
+const an = {q:[], cur:null, tiles:[], picks:[], art:null, state:"play", msg:"", score:0, total:0};
+function nextAn(){
+  if (!an.q.length) an.q = shuffle(words());
+  an.cur = an.q.pop(); const W = UP(an.cur.w);
+  let s, t = 0; do { s = shuffle([...W]); } while (s.join("") === W && t++ < 30);
+  Object.assign(an, {tiles:s, picks:[], art:null, state:"play", msg:""}); renderAn();
+}
+function anEval(){
+  const W = UP(an.cur.w);
+  if (an.picks.length < W.length) return renderAn();
+  if (!an.art) { an.msg = "Şimdi artikeli seç."; return renderAn(); }
+  const lettersOk = an.picks.map(i => an.tiles[i]).join("") === W, artOk = an.art === an.cur.a;
+  if (lettersOk && artOk) { an.state = "ok"; an.score++; an.total++; an.msg = ""; good(10); return renderAn(); }
+  an.state = "bad"; an.msg = !lettersOk && !artOk ? "Harfler ve artikel yanlış." : !lettersOk ? "Kelime yanlış, harfleri tekrar dene." : "Kelime doğru ama artikel yanlış!";
+  sfx("bad"); renderAn();
+  setTimeout(() => { if (!lettersOk) an.picks = []; if (!artOk) an.art = null; an.state = "play"; renderAn(); }, 800);
+}
+function renderAn(){
+  const W = UP(an.cur.w), fin = an.state === "ok" || an.state === "shown", shown = an.state === "shown";
+  const slots = [...W].map((ch,i) => `<div class="slot">${shown ? ch : (an.picks[i] !== undefined ? an.tiles[an.picks[i]] : "")}</div>`).join("");
+  const a = shown ? an.cur.a : an.art;
+  $("#game").innerHTML = `<section class="panel">
+    <div class="head"><h2>Harfleri sırala</h2><span class="score">Doğru: <b>${an.score}</b> / ${an.total}</span></div>
+    <div class="prompt"><div class="tr">${esc(an.cur.tr)}</div><small>Artikeli ve Almanca kelimeyi bul (${W.length} harf)</small></div>
+    <div class="answer ${an.state === "bad" ? "bad shake" : an.state === "ok" ? "ok" : ""}"><div class="artslot ${a || ""}">${a || "___"}</div><div class="slots">${slots}</div></div>
+    ${fin ? `<div class="result">${art(an.cur.a, an.cur.w)}</div><p class="hint" style="text-align:center">${an.state === "ok" ? "Harika! Artikeliyle birlikte sesli söyle." : "Bir dahakine! Kelimeyi artikeliyle birlikte aklında tut."}</p>
+      <div class="row center"><button class="btn primary" id="anNext">Sonraki kelime</button></div>`
+    : `<p class="step">1. Artikel</p>${artBtns("anart", {sm:true, on:an.art, disabled: an.state !== "play"})}
+      <p class="step">2. Harfler</p><div class="tiles">${an.tiles.map((ch,i) => `<button class="tile" data-tile="${i}" ${an.picks.includes(i) ? "disabled" : ""}>${ch}</button>`).join("")}</div>
+      <p class="msg">${esc(an.msg)}</p>
+      <div class="row center"><button class="btn" id="anBs">⌫ Sil</button><button class="btn" id="anHint">İpucu</button><button class="btn" id="anShow">Cevabı göster</button></div>`}
+  </section>`;
+}
+document.addEventListener("click", e => {
+  if (tab !== "an") return;
+  const ab = e.target.closest("[data-anart]");
+  if (ab && an.state === "play") { an.art = ab.dataset.anart; an.msg = ""; anEval(); return; }
+  const t = e.target.closest("[data-tile]");
+  if (t && an.state === "play") { const i = +t.dataset.tile; if (!an.picks.includes(i)) { an.picks.push(i); an.msg = ""; anEval(); } return; }
+  if (e.target.id === "anBs" && an.state === "play") { an.picks.pop(); an.msg = ""; renderAn(); }
+  if (e.target.id === "anHint" && an.state === "play") {
+    const W = UP(an.cur.w); let k = 0; while (k < an.picks.length && an.tiles[an.picks[k]] === W[k]) k++;
+    const np = []; for (let i = 0; i <= Math.min(k, W.length-1); i++) { const idx = an.tiles.findIndex((ch,j) => ch === W[i] && !np.includes(j)); np.push(idx); }
+    an.picks = np; an.msg = ""; anEval();
+  }
+  if (e.target.id === "anShow") { an.state = "shown"; an.total++; renderAn(); }
+  if (e.target.id === "anNext") nextAn();
+});
+
+/* ---------- der / die / das ---------- */
+const ar = {q:[], cur:null, ans:null, score:0, total:0, streak:0};
+function nextAr(){ if (!ar.q.length) ar.q = shuffle(words()); ar.cur = ar.q.pop(); ar.ans = null; renderAr(); }
+function renderAr(){
+  const {a,w,tr} = ar.cur, ok = ar.ans === a;
+  const cls = ar.ans ? {[a]:"picked-ok", ...(ok ? {} : {[ar.ans]:"picked-bad"})} : {};
+  $("#game").innerHTML = `<section class="panel">
+    <div class="head"><h2>Artikeli seç</h2><span class="score">Doğru: <b>${ar.score}</b> / ${ar.total} · Seri: <b>${ar.streak}</b></span></div>
+    <div><div class="big">${esc(w)}</div><p class="hint" style="text-align:center;font-size:16px">${esc(tr)}</p></div>
+    ${artBtns("art", {cls, disabled: !!ar.ans})}
+    ${ar.ans ? `<div class="fb ${ok ? "ok" : "bad"}">${ok ? "Doğru!" : "Yanlış."} ${art(a,w)}</div>
+      <div class="tipbox">${tip(a,w)}</div>
+      <div class="row center"><button class="btn primary" id="arNext">Sonraki kelime</button></div>` : `<p class="hint" style="text-align:center">Bu ismin artikeli hangisi?</p>`}
+  </section>`;
+}
+document.addEventListener("click", e => {
+  if (tab !== "ar") return;
+  const b = e.target.closest("[data-art]");
+  if (b && !ar.ans) {
+    ar.ans = b.dataset.art; ar.total++;
+    if (ar.ans === ar.cur.a) { ar.score++; ar.streak++; good(5); if (ar.streak > 0 && ar.streak % 10 === 0) { sfx("win"); toast(ar.streak + " doğru üst üste!"); } }
+    else { ar.streak = 0; wrong(); }
+    renderAr(); return;
+  }
+  if (e.target.id === "arNext") nextAr();
+});
+
+/* ---------- Matching ---------- */
+const mt = {pick:null, L:[], R:[], sL:null, sR:null, done:new Set(), miss:0, wrong:null};
+function newMT(){
+  const seen = new Set(); mt.pick = shuffle(words()).filter(x => !seen.has(x.tr) && seen.add(x.tr)).slice(0,6);
+  mt.L = shuffle(mt.pick.map((_,i) => i)); mt.R = shuffle(mt.pick.map((_,i) => i));
+  Object.assign(mt, {sL:null, sR:null, done:new Set(), miss:0, wrong:null}); renderMT();
+}
+function renderMT(){
+  const fin = mt.done.size === mt.pick.length;
+  const card = (side,i) => { const x = mt.pick[i], d = mt.done.has(i), on = (side === "L" ? mt.sL : mt.sR) === i, wr = mt.wrong && mt.wrong[side] === i;
+    return `<button class="card ${d ? "done" : ""} ${on ? "on" : ""} ${wr ? "wrong" : ""}" data-side="${side}" data-i="${i}" ${d ? "disabled" : ""}>${side === "L" ? art(x.a,x.w) : esc(x.tr)}</button>`; };
+  $("#game").innerHTML = `<section class="panel">
+    <div class="head"><h2>Eşleştir</h2><span class="score">Eşleşen: <b>${mt.done.size}</b> / ${mt.pick.length} · Hata: <b>${mt.miss}</b></span></div>
+    <p class="hint">Soldan bir Almanca kelime, sağdan Türkçe anlamını seç.</p>
+    ${fin ? `<div class="win">Tebrikler! ${mt.miss === 0 ? "Hiç hata yapmadan" : mt.miss + " hatayla"} bitirdin.</div>` : ""}
+    <div class="match"><div class="col">${mt.L.map(i => card("L",i)).join("")}</div><div class="col">${mt.R.map(i => card("R",i)).join("")}</div></div>
+    <div class="row center"><button class="btn primary" id="mtNew">Yeni tur</button></div>
+  </section>`;
+}
+document.addEventListener("click", e => {
+  if (tab !== "mt") return;
+  const c = e.target.closest("[data-side]");
+  if (c) {
+    const i = +c.dataset.i; if (c.dataset.side === "L") mt.sL = i; else mt.sR = i; mt.wrong = null;
+    if (mt.sL !== null && mt.sR !== null) {
+      if (mt.sL === mt.sR) { mt.done.add(mt.sL); if (mt.done.size === mt.pick.length) { addPts(3); sfx("win"); } else good(3); }
+      else { mt.miss++; mt.wrong = {L:mt.sL, R:mt.sR}; wrong(); }
+      mt.sL = mt.sR = null;
+    }
+    renderMT(); return;
+  }
+  if (e.target.id === "mtNew") newMT();
+});
+
+/* ---------- Word list ---------- */
+function renderSz(){
+  const groups = themeId === "hepsi" ? THEMES.filter(t => t.id !== "hepsi") : [THEMES.find(t => t.id === themeId)];
+  $("#game").innerHTML = `<section class="panel"><h2>Kelime listesi</h2>
+    <div class="legend"><span><b class="der">der</b> eril</span><span><b class="die">die</b> dişil</span><span><b class="das">das</b> nötr</span></div>
+    <p class="hint">Oynamadan önce göz at. Her kelimeyi artikeliyle birlikte ezberle.</p>
+    <table class="dict"><tbody>${groups.map(g => (groups.length > 1 ? `<tr class="grp"><td colspan="2">${g.ad}</td></tr>` : "") +
+      g.words.map(x => `<tr><td>${art(x.a,x.w)}</td><td>${esc(x.tr)}</td></tr>`).join("")).join("")}</tbody></table></section>`;
+}
+
+$("#pts").textContent = "★ " + points;
+renderMute(); renderNav(); start();
+if ("serviceWorker" in navigator && location.protocol === "https:") {
+  window.addEventListener("load", () => { navigator.serviceWorker.register("sw.js").catch(() => {}); });
+}
+</script>
+</body>
+</html>
